@@ -6,7 +6,7 @@ $CFG = new stdClass();
 
 $CFG->dbtype    = 'pgsql';
 $CFG->dblibrary = 'native';
-$CFG->dbhost    = 'moodle-db';
+$CFG->dbhost    = '172.99.0.3';
 $CFG->dbname    = 'moodle';
 $CFG->dbuser    = 'moodle_user';
 $CFG->dbpass    = 'password';
@@ -17,29 +17,28 @@ $CFG->dboptions = array (
   'dbsocket' => '',
 );
 
-$CFG->phpunit_dbtype    = 'pgsql';
-$CFG->phpunit_dblibrary = 'native';
-$CFG->phpunit_dbhost    = 'moodle-test-db';
-$CFG->phpunit_dbname    = 'moodle';
-$CFG->phpunit_dbuser    = 'moodle_user';
-$CFG->phpunit_dbpass    = 'password';
-$CFG->phpunit_prefix = 'phpu_';
-$CFG->phpunit_dataroot = '/var/lib/testsitedata';
-
-$CFG->wwwroot   = 'http://localhost';
+$CFG->wwwroot   = 'https://172.99.0.2';
 $CFG->dataroot  = '/var/lib/sitedata';
 
 $CFG->admin     = 'admin';
 
 //Force a debugging mode regardless the settings in the site administration
-@error_reporting(E_ALL | E_STRICT); // NOT FOR PRODUCTION SERVERS!
-$CFG->debug = (E_ALL | E_STRICT);   // === DEBUG_DEVELOPER - NOT FOR PRODUCTION SERVERS!
+@error_reporting(E_ALL); // NOT FOR PRODUCTION SERVERS!
+$CFG->debug = (E_ALL);   // === DEBUG_DEVELOPER - NOT FOR PRODUCTION SERVERS!
 
 $CFG->noemailever = true;
 
 $CFG->directorypermissions = 0777;
 
+// Prevent JS caching
+$CFG->cachejs = false;
+
+$CFG->allowframembedding = true;
+
+// Insert this after $CFG->dataroot is defined.
+if (file_exists(__DIR__.'/auth/outage/bootstrap.php')) {
+    require(__DIR__.'/auth/outage/bootstrap.php');
+}
+
 require_once(dirname(__FILE__) . '/lib/setup.php');
 
-// There is no php closing tag in this file,
-// it is intentional because it prevents trailing whitespace problems!

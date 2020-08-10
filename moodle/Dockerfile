@@ -17,6 +17,10 @@ RUN apt-get update -y \
     php-xml \
     php-mbstring \
     php-zip \
+    nano \
+    net-tools \
+    iputils-ping \
+    telnet \
     locales
 
 RUN locale-gen en_AU.UTF-8
@@ -33,6 +37,9 @@ COPY nginx-site.conf /etc/nginx/sites-available/default
 
 RUN rm /etc/nginx/nginx.conf
 COPY nginx.conf /etc/nginx/nginx.conf
+COPY dhparam.pem /etc/ssl/certs/dhparam.pem
+COPY nginx-selfsigned.crt /etc/ssl/certs/nginx-selfsigned.crt
+COPY nginx-selfsigned.key /etc/ssl/private/nginx-selfsigned.key
 
 COPY 99-xdebug.ini /etc/php/7.2/mods-available/xdebug.ini
 

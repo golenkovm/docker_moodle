@@ -3,10 +3,13 @@ version: '3'
 services:
   moodle:
     build: ./moodle
-    ports:
-      - "80:80"
     volumes:
       - ./siteroot:/siteroot
+    environment:
+      TZ: "Australia/Melbourne"
+    networks:
+      static:
+        ipv4_address: 172.99.0.2
   moodle-db:
     image: postgres
     restart: always
@@ -16,15 +19,16 @@ services:
       POSTGRES_USER: moodle_user
     volumes: 
       - 'moodledb:/var/lib/postgresql'
-  moodle-test-db:
-    image: postgres
-    restart: always
     environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: moodle
-      POSTGRES_USER: moodle_user
-    volumes: 
-      - 'moodletestdb:/var/lib/postgresql'
+      TZ: "Australia/Melbourne"
+    networks:
+      static:
+        ipv4_address: 172.99.0.3
 volumes:
     moodledb:
-    moodletestdb:
+networks:
+  static:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.99.0.0/16
